@@ -1,5 +1,5 @@
 body {
-  background-color: #222;
+  background-color: #222; /* Set a background color for the body */
   margin: 0;
   display: flex;
   align-items: center;
@@ -7,13 +7,9 @@ body {
   height: 100vh;
 }
 
-#startScreen, #difficultyScreen {
-  text-align: center;
-}
-
-#snakeCanvas {
+canvas {
   border: 8px solid #333; /* Dark thick border color */
   background-color: #00FF00; /* Green background color */
-  image-rendering: pixelated;
+  image-rendering: pixelated; /* Ensures sharp pixels */
   box-sizing: border-box;
 }
