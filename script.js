@@ -1,9 +1,10 @@
 const canvas = document.getElementById('snakeCanvas');
 const ctx = canvas.getContext('2d');
-
-const block_size = 20; // size of each block
-const canvas_size = 360; // canvas size
-const num_blocks = canvas_size / block_size;
+const block_size = 30; // size of each block
+const canvas_size = Math.min(0.8 * window.innerWidth, 0.8 * window.innerHeight);
+canvas.width = canvas_size;
+canvas.height = canvas_size;
+const num_blocks = Math.floor(canvas_size / block_size); // Ensure blocks fit within the canvas
 
 let snake = [{ x: 9 * block_size, y: 9 * block_size }]; // start in the middle
 let direction = 'right';
@@ -167,15 +168,65 @@ document.addEventListener('keydown', (event) => {
       case 'ArrowUp':
         direction = 'up';
         break;
+      case 'w':
+        direction = 'up';
+        break;
       case 'ArrowDown':
+        direction = 'down';
+        break;
+      case 's':
         direction = 'down';
         break;
       case 'ArrowLeft':
         direction = 'left';
         break;
+      case 'a':
+        direction = 'left';
+        break;
       case 'ArrowRight':
+        direction = 'right';
+        break;
+      case 'd':
         direction = 'right';
         break;
     }
   }
 });
+
+const snakeHeadImage = new Image();
+snakeHeadImage.src = './images/favicon/orichimaru%20snake.png'; // Update the path to your image file
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Draw checkered pattern
+  for (let row = 0; row < num_blocks; row++) {
+    for (let col = 0; col < num_blocks; col++) {
+      const x = col * block_size;
+      const y = row * block_size;
+
+      // Use light green and very light green
+      const color = (row + col) % 2 === 0 ? '#98FB98' : '#C1FFC1';
+
+      ctx.fillStyle = color;
+      ctx.fillRect(x, y, block_size, block_size);
+    }
+  }
+
+  // Draw the snake
+  snake.forEach((segment, index) => {
+    if (index === 0) {
+      // Draw the head using an image
+      ctx.drawImage(snakeHeadImage, segment.x, segment.y, block_size, block_size);
+    } else {
+      // Draw the body of the snake
+      ctx.fillStyle = '#008000'; // Green color for the snake body
+      ctx.fillRect(segment.x, segment.y, block_size, block_size);
+    }
+  });
+
+  // Draw food or other elements
+  ctx.fillStyle = '#F00';
+  ctx.fillRect(food.x, food.y, block_size, block_size);
+}
+

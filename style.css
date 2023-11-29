@@ -1,5 +1,5 @@
 body {
-  background-color: #222; /* Set a background color for the body */
+  background-image: url(./images/favicon/konoha.png);
   margin: 0;
   display: flex;
   align-items: center;
@@ -8,8 +8,36 @@ body {
 }
 
 canvas {
-  border: 8px solid #333; /* Dark thick border color */
-  background-color: #00FF00; /* Green background color */
+  border: 8px solid #333;
+  background-color: #00FF00; 
   image-rendering: pixelated; /* Ensures sharp pixels */
   box-sizing: border-box;
+}
+
+#snakeCanvas {
+  border: 8px solid darkgreen; 
+  box-sizing: border-box;
+}
+
+/*CSS welcome class flex container to organize game layout*/
+.welcome {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  background-color: red;
+  align-items: center;
+  height:400px;
+  width: 700px;
+  padding: 50px;
+  border-radius: 20px;
+  box-shadow: #b08968 0px 8px 40px
+  
+}
+
+.welcome h1{
+  margin-top: 140px;
+}
+
+.welcome button {
+  margin: 10px;
 }
