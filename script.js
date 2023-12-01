@@ -1,10 +1,10 @@
 const canvas = document.getElementById('snakeCanvas');
 const ctx = canvas.getContext('2d');
-const block_size = 30; // size of each block
-const canvas_size = Math.min(0.8 * window.innerWidth, 0.8 * window.innerHeight);
-canvas.width = canvas_size;
-canvas.height = canvas_size;
-const num_blocks = Math.floor(canvas_size / block_size); // Ensure blocks fit within the canvas
+const block_size = 40; // size of each block
+const canvas_size = Math.floor(Math.min(0.8 * window.innerWidth, 0.8 * window.innerHeight) / block_size) * block_size;
+canvas.width = canvas_size - (canvas_size % block_size);
+canvas.height = canvas_size - (canvas_size % block_size); 
+const num_blocks = Math.floor(canvas_size / block_size);
 
 let snake = [{ x: 9 * block_size, y: 9 * block_size }]; // start in the middle
 let direction = 'right';
@@ -13,6 +13,10 @@ let gameRunning = false;
 let difficulty = 'medium'; // default difficulty
 let gameInterval; // variable to store the game loop interval
 let difficultyScreenVisible = false;
+let score = 0; 
+let gameStarted = false;
+let countdown = 3; 
+
 const speed = getSpeedForDifficulty(difficulty);
 
 function getRandomPosition() {
@@ -60,12 +64,18 @@ function update() {
     snake.unshift(head);
 
     if (head.x === food.x && head.y === food.y) {
+      // Snake ate the apple
+      score++; // Increase the score
       food = getRandomPosition();
     } else {
       snake.pop();
     }
   }
+
+  // Update the scoreboard only when the snake eats the apple
+  updateScoreboard();
 }
+
 
 function gameLoop() {
   if (gameRunning) {
@@ -80,6 +90,9 @@ function startGame() {
   document.getElementById('snakeCanvas').style.display = 'block';
   gameRunning = true;
   gameInterval = setInterval(gameLoop, speed);
+  resetScore();
+  showScoreboard();
+  updateScoreboard(); 
 }
 
 function showDifficultyScreen() {
@@ -124,6 +137,7 @@ function endGame() {
     document.getElementById('startScreen').style.display = 'block';
   }
   clearInterval(gameInterval); // stop the game loop
+  hideScoreboard();
 }
 
 function goBack() {
@@ -152,43 +166,50 @@ function updateDifficultyButtons() {
 function getSpeedForDifficulty(difficulty) {
   switch (difficulty) {
     case 'easy':
-      return 150;
+      return 170;
     case 'medium':
-      return 100;
+      return 120;
     case 'hard':
       return 75;
     default:
-      return 100;
+      return 150;
   }
 }
 
 document.addEventListener('keydown', (event) => {
   if (gameRunning) {
+    // Get the current direction
+    const currentDirection = direction;
+
+    // Set the new direction based on the pressed key
     switch (event.key) {
       case 'ArrowUp':
-        direction = 'up';
-        break;
       case 'w':
         direction = 'up';
         break;
       case 'ArrowDown':
-        direction = 'down';
-        break;
       case 's':
         direction = 'down';
         break;
       case 'ArrowLeft':
-        direction = 'left';
-        break;
       case 'a':
         direction = 'left';
         break;
       case 'ArrowRight':
-        direction = 'right';
-        break;
       case 'd':
         direction = 'right';
         break;
+    }
+
+    // Check if the new direction is not opposite to the current direction
+    if (
+      (currentDirection === 'up' && direction === 'down') ||
+      (currentDirection === 'down' && direction === 'up') ||
+      (currentDirection === 'left' && direction === 'right') ||
+      (currentDirection === 'right' && direction === 'left')
+    ) {
+      // The new direction is opposite, revert to the previous direction
+      direction = currentDirection;
     }
   }
 });
@@ -199,14 +220,14 @@ snakeHeadImage.src = './images/favicon/orichimaru%20snake.png'; // Update the pa
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // Draw checkered pattern
+  // Draw purple pattern
   for (let row = 0; row < num_blocks; row++) {
     for (let col = 0; col < num_blocks; col++) {
       const x = col * block_size;
       const y = row * block_size;
 
-      // Use light green and very light green
-      const color = (row + col) % 2 === 0 ? '#98FB98' : '#C1FFC1';
+      // Use light purple and very light purple
+      const color = (row + col) % 2 === 0 ? '#C1B6CD' : '#E1DCEC';
 
       ctx.fillStyle = color;
       ctx.fillRect(x, y, block_size, block_size);
@@ -220,7 +241,7 @@ function draw() {
       ctx.drawImage(snakeHeadImage, segment.x, segment.y, block_size, block_size);
     } else {
       // Draw the body of the snake
-      ctx.fillStyle = '#008000'; // Green color for the snake body
+      ctx.fillStyle = '#7B3F00'; // Green color for the snake body
       ctx.fillRect(segment.x, segment.y, block_size, block_size);
     }
   });
@@ -230,3 +251,92 @@ function draw() {
   ctx.fillRect(food.x, food.y, block_size, block_size);
 }
 
+function showGameOverScreen() {
+  document.getElementById('gameOverScreen').style.display = 'flex';
+  document.getElementById('snakeCanvas').style.display = 'none';
+}
+
+// Modify your endGame function
+function endGame() {
+  gameRunning = false;
+  // Hide the canvas
+  document.getElementById('snakeCanvas').style.display = 'none';
+
+  // Show the game over screen
+  document.getElementById('gameOverScreen').style.display = 'flex';
+
+  // Stop the game loop
+  clearInterval(gameInterval);
+  hideScoreboard();
+}
+
+// Add this function to restart the game
+function restartGame() {
+  // Hide the game over screen
+  document.getElementById('gameOverScreen').style.display = 'none';
+
+  // Reset game variables and start a new game
+  snake = [{ x: 9 * block_size, y: 9 * block_size }];
+  direction = 'right';
+  food = getRandomPosition();
+  gameRunning = true;
+
+  // Reset the score to 0
+  score = 0;
+
+  // Display the canvas
+  document.getElementById('snakeCanvas').style.display = 'block';
+
+  // Show and update the scoreboard
+  document.getElementById('scoreboard').style.display = 'block';
+  updateScoreboard();
+
+  // Start the game loop
+  gameInterval = setInterval(gameLoop, getSpeedForDifficulty(difficulty));
+
+  updateScoreboard();  // Update the scoreboard when the game starts
+}
+
+// Add this function to update the scoreboard
+function updateScoreboard() {
+  document.getElementById('score').textContent = score;
+}
+
+
+function updateScoreboard() {
+  console.log('Updating scoreboard:', score);
+  document.getElementById('score').textContent = score;
+}
+
+function incrementScore() {
+  score++;
+  updateScore();
+}
+
+function resetScore() {
+  score = 0;
+  updateScore();
+}
+
+function showScoreboard() {
+  document.getElementById('scoreboard').style.display = 'block';
+}
+
+function hideScoreboard() {
+  document.getElementById('scoreboard').style.display = 'none';
+}
+
+function goToMenu() {
+  document.getElementById('gameOverScreen').style.display = 'none';
+  document.getElementById('difficultyScreen').style.display = 'none';
+  document.getElementById('snakeCanvas').style.display = 'none';
+  document.getElementById('startScreen').style.display = 'block';
+
+  // Reset game state
+  gameRunning = false;
+  clearInterval(gameInterval);
+  snake = [{ x: 9 * block_size, y: 9 * block_size }];
+  direction = 'right';
+  food = getRandomPosition();
+  hideScoreboard();
+}
