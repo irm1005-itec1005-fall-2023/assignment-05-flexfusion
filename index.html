@@ -6,20 +6,52 @@
   <title>Snake Game</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+  <div class="side-container left-container">
+    <img src="./images/favicon/sasuke_uchiha_by_tokyosaiyan_df0o1t4-pre.png" alt="sasuke img">
+    
+  </div>
+
+  <div class="main-content">
   <div class="welcome" id="startScreen">
-    <h1>Orichimaru's Snake</h1> <!--Let's change this later using a tittle created from canva or smth-->
+    <h1>Orichimaru's Snake</h1>
     <button id="playButton" onclick="startGame()">Play</button>
     <button id="chooseDif" onclick="showDifficultyScreen()">Choose Difficulty</button>
   </div>
+  
   <div id="difficultyScreen" style="display: none;">
     <h1>Choose Difficulty</h1>
-    <button id="easyButton" onclick="startGameWithDifficulty('easy')">Easy</button>
-    <button id="mediumButton" onclick="startGameWithDifficulty('medium')">Medium</button>
-    <button id="hardButton" onclick="startGameWithDifficulty('hard')">Hard</button>
-    <button onclick="goBack()">Back</button>
+    <div class="difficulty">
+      <button id="easyButton" onclick="startGameWithDifficulty('easy')">Easy</button>
+      <button id="mediumButton" onclick="startGameWithDifficulty('medium')">Medium</button>
+      <button id="hardButton" onclick="startGameWithDifficulty('hard')">Hard</button>
+      <button id="backButton" onclick="goBack()">Back</button>
+    </div>
   </div>
-  <canvas id="snakeCanvas" width="50" height="50" style="display: none;"></canvas>
+
+  <div class="game-container" id="gameContainer">
+    <!-- Game Over Screen -->
+    <div class="game-over" id="gameOverScreen" style="display: none;">
+      <h2>Game Over!</h2>
+      <button id="restartButton" onclick="restartGame()">Restart</button>
+      <button id="menuButton" onclick="goToMenu()">Menu</button>
+    </div>
+  </div>
+  </div>
+
+  <div class="scoreboard" id="scoreboard">
+    <p>Score: <span id="score">0</span></p>
+  </div>
+  
+    <!-- Snake Game Canvas -->
+    <canvas id="snakeCanvas" width="50" height="50" style="display: none;"></canvas>
+  </div>
+
+  <div class="side-container right-container">
+    <img src="./images/favicon/download.jpg" alt="naruto">
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
