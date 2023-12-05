@@ -16,6 +16,8 @@ let difficultyScreenVisible = false;
 let score = 0; 
 let gameStarted = false;
 let countdown = 3; 
+let eatSound = document.getElementById('eatSound');
+let backgroundMusic = document.getElementById('backgroundMusic');
 
 const speed = getSpeedForDifficulty(difficulty);
 
@@ -39,6 +41,7 @@ function draw() {
 
 function update() {
   const head = { ...snake[0] };
+
   switch (direction) {
     case 'up':
       head.y -= block_size;
@@ -67,6 +70,9 @@ function update() {
       // Snake ate the apple
       score++; // Increase the score
       food = getRandomPosition();
+
+      // Play the eat sound when the snake eats the apple
+      playEatSound();
     } else {
       snake.pop();
     }
@@ -74,6 +80,11 @@ function update() {
 
   // Update the scoreboard only when the snake eats the apple
   updateScoreboard();
+}
+
+function playEatSound() {
+  eatSound.currentTime = 0; // Rewind the sound to the beginning
+  eatSound.play();
 }
 
 
@@ -93,6 +104,7 @@ function startGame() {
   resetScore();
   showScoreboard();
   updateScoreboard(); 
+  playBackgroundMusic();
 }
 
 function showDifficultyScreen() {
@@ -138,6 +150,7 @@ function endGame() {
   }
   clearInterval(gameInterval); // stop the game loop
   hideScoreboard();
+  playBackgroundMusic();
 }
 
 function goBack() {
@@ -237,8 +250,21 @@ function draw() {
   // Draw the snake
   snake.forEach((segment, index) => {
     if (index === 0) {
-      // Draw the head using an image
-      ctx.drawImage(snakeHeadImage, segment.x, segment.y, block_size, block_size);
+      // Draw eyes on the head
+      const eyeSize = block_size / 5;
+      const eyeOffsetX = block_size / 4;
+      const eyeOffsetY = block_size / 4;
+
+      // Draw left eye
+      ctx.fillStyle = '#000';
+      ctx.beginPath();
+      ctx.arc(segment.x + eyeOffsetX, segment.y + eyeOffsetY, eyeSize, 0, 2 * Math.PI);
+      ctx.fill();
+
+      // Draw right eye
+      ctx.beginPath();
+      ctx.arc(segment.x + 3 * eyeOffsetX, segment.y + eyeOffsetY, eyeSize, 0, 2 * Math.PI);
+      ctx.fill();
     } else {
       // Draw the body of the snake
       ctx.fillStyle = '#7B3F00'; // Green color for the snake body
@@ -250,7 +276,6 @@ function draw() {
   ctx.fillStyle = '#F00';
   ctx.fillRect(food.x, food.y, block_size, block_size);
 }
-
 function showGameOverScreen() {
   document.getElementById('gameOverScreen').style.display = 'flex';
   document.getElementById('snakeCanvas').style.display = 'none';
@@ -295,6 +320,7 @@ function restartGame() {
   gameInterval = setInterval(gameLoop, getSpeedForDifficulty(difficulty));
 
   updateScoreboard();  // Update the scoreboard when the game starts
+  playBackgroundMusic();
 }
 
 // Add this function to update the scoreboard
@@ -339,4 +365,33 @@ function goToMenu() {
   direction = 'right';
   food = getRandomPosition();
   hideScoreboard();
+}
+
+// Function to play background music
+function playBackgroundMusic() {
+  backgroundMusic.play();
+}
+
+// Function to pause background music
+function pauseBackgroundMusic() {
+  backgroundMusic.pause();
+}
+
+// Add these functions to handle the settings screen
+function showSettingsScreen() {
+  document.getElementById('startScreen').style.display = 'none';
+  document.getElementById('settingsScreen').style.display = 'block';
+}
+
+function hideSettingsScreen() {
+  document.getElementById('settingsScreen').style.display = 'none';
+  document.getElementById('startScreen').style.display = 'block';
+}
+
+function changeVolume(volume) {
+  // Ensure volume is within the valid range (0.0 to 1.0)
+  volume = Math.max(0.0, Math.min(1.0, volume));
+
+  // Set the background music volume
+  backgroundMusic.volume = volume;
 }
