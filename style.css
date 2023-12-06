@@ -108,6 +108,36 @@ canvas {
   padding-right: 15px;
 }
 
+#settingsButton {
+  color:#320c39;
+  background-color: #cda4d4;
+  border-radius: 50px;
+  border-width: 0;
+  font-size: 20px;
+  text-transform: uppercase;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+#settingsScreen {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  background-color: #a392a6;
+
+  align-items: center;
+  height:300px;
+  width: 600px;
+  padding: 20px;
+
+  border-radius: 20px;
+  box-shadow: #6d3178 0px 8px 40px;
+
+  /*Again we can change title using one created from canva or smth*/
+  color:#320c39;
+  font-size: 30px;
+}
+
 #chooseDif {
   color:#320c39;
   background-color: #cda4d4;
