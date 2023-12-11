@@ -32,27 +32,21 @@
     </div>
   </div>
 
-  <div class="game-container" id="gameContainer">
-    <!-- Game Over Screen -->
-    <div class="game-over" id="gameOverScreen" style="display: none;">
-      <h2>Game Over!</h2>
-      <p class="yourScore">Your score was</p> 
-      <button id="restartButton" onclick="restartGame()">Restart</button>
-      <button id="menuButton" onclick="goToMenu()">Menu</button>
-    </div>
+  <div class="game-over" id="gameOverScreen" style="display: none;">
+    <h2>Game Over!</h2>
+    <p class="yourScore">Your score was <span id="gameOverScore">0</span></p> <!-- Updated line -->
+    <button id="restartButton" onclick="restartGame()">Restart</button>
+    <button id="menuButton" onclick="goToMenu()">Menu</button>
   </div>
-  </div>
+
 
   <!--Scoreboard-->
   <div class="scoreboard" id="scoreboard">
     <p class="scoreText">Score: <span id="score">0</span></p>
   </div>
   <canvas id="snakeCanvas" width="50" height="50" style="display: none;"></canvas>
-  <audio id="eatSound" src="./audios/y2mate.com - Pou eating sound effect.mp3" preload="auto"></audio>
-  <audio id="backgroundMusic" src="./audios/y2mate.com - ALL MY FELLAS.mp3" preload="auto" loop></audio>
+  <audio id="eatSound" src="./audios/poueating.mp3" preload="auto"></audio>
+  <audio id="backgroundMusic" src="./audios/allmyfellas.mp3" preload="auto" loop></audio>
   <script src="script.js"></script>
 </body>
 </html>
-
-
-
