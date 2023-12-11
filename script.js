@@ -279,6 +279,7 @@ function draw() {
 function showGameOverScreen() {
   document.getElementById('gameOverScreen').style.display = 'flex';
   document.getElementById('snakeCanvas').style.display = 'none';
+  document.getElementById('gameOverScore').textContent = score; // Updated line
 }
 
 // Modify your endGame function
@@ -332,6 +333,7 @@ function updateScoreboard() {
 function updateScoreboard() {
   console.log('Updating scoreboard:', score);
   document.getElementById('score').textContent = score;
+  document.getElementById('gameOverScore').textContent = score; 
 }
 
 function incrementScore() {
